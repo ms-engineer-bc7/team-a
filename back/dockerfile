@@ -1,11 +1,29 @@
-FROM node:lts
+# ベースイメージを指定
+FROM python:3.9
 
-WORKDIR /usr/src/myapp
+# 作業ディレクトリを設定
+WORKDIR /app
 
-COPY . .
+# 必要なファイルをコピー
+COPY . /app
 
-RUN npm install
+# Flaskをインストール
+RUN pip install Flask
 
-EXPOSE 3000
+# 必要なライブラリをインストール ORMやDB接続のためのドライバー
+RUN pip install SQLAlchemy
+RUN pip install psycopg2
+RUN pip install flask-restful
 
-CMD ["npm", "run", "start"]
+# 必要な依存関係をインストール JSONのシリアライザやバリデーションライブラリ、認証ライブラリ
+RUN pip install Flask-JSON
+
+# ファイル生成スクリプトを実行
+RUN echo "from flask import Flask" > app.py \
+    && echo "app = Flask(__name__)" >> app.py
+
+# ポートを公開
+EXPOSE 5000
+
+# コンテナ内で実行するコマンドを指定
+CMD ["python", "app.py"]
