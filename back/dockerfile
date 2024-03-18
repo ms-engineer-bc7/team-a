@@ -1,11 +1,20 @@
-FROM node:lts
+# ベースイメージを指定
+FROM python:3.9
 
-WORKDIR /usr/src/myapp
+# 作業ディレクトリを設定
+WORKDIR /app
 
-COPY . .
+# 必要なファイルをコピー
+COPY . /app
 
-RUN npm install
+# Flaskをインストール
+RUN pip install Flask
 
-EXPOSE 3000
+# 必要な依存関係をインストール
+RUN pip install <必要なライブラリ>
 
-CMD ["npm", "run", "start"]
+# ポートを公開
+EXPOSE 5000
+
+# コンテナ内で実行するコマンドを指定
+CMD ["python", "app.py"]
