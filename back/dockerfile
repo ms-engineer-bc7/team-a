@@ -26,14 +26,15 @@ RUN pip install --upgrade pip
 RUN pip install Flask-JSON
 
 # ファイル生成スクリプトを実行
-RUN echo "from flask import Flask" > app.py \
-    && echo "app = Flask(__name__)" >> app.py
+# RUN echo "from flask import Flask" > app.py \
+#     && echo "app = Flask(__name__)" >> app.py
 
 # 必要な依存関係をインストール
 # RUN pip install <必要なライブラリ>
 
 # ポートを公開
-EXPOSE 5000
+# EXPOSE 5000
 
 # コンテナ内で実行するコマンドを指定
-CMD ["python", "app.py"]
+CMD ["flask", "run"]
+# CMD ["python", "app.py"]
