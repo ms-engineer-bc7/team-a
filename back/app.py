@@ -31,11 +31,11 @@ def update_quote(id):
         if new_text:
             quote.text = new_text
             db.session.commit()
-            return jsonify({'message': 'Quote updated successfully'}), 200
+            return jsonify({'message': '名言の登録が成功しました'}), 200
         else:
-            return jsonify({'error': 'Text field is required'}), 400
+            return jsonify({'error': 'テキストの入力をしてください'}), 400
     else:
-        return jsonify({'error': 'Quote not found'}), 404
+        return jsonify({'error': '名言が見当たりません'}), 404
     
 # PUTエンドポイント設定 
 @app.route('/quotes/<int:id>', methods=['PUT'])
@@ -46,12 +46,22 @@ def update_quote(id):
         if new_text:
             quote.text = new_text
             db.session.commit()
-            return jsonify({'message': 'Quote updated successfully'}), 200
+            return jsonify({'message': '名言の更新が成功しました'}), 200
         else:
-            return jsonify({'error': 'Text field is required'}), 400
+            return jsonify({'error': 'テキストの入力をしてください'}), 400
     else:
-        return jsonify({'error': 'Quote not found'}), 404
-
+        return jsonify({'error': '名言が見当たりません'}), 404
+    
+# DELETEエンドポイント設定
+@app.route('/quotes/<int:id>', methods=['DELETE'])
+def delete_quote(id):
+    quote = Quote.query.get(id)
+    if quote:
+        db.session.delete(quote)
+        db.session.commit()
+        return jsonify({'message': '名言の削除が成功しました'}), 200
+    else:
+        return jsonify({'error': '名言が見当たりません'}), 404
 
 
 
