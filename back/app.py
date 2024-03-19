@@ -11,6 +11,7 @@ class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String, nullable=False)
 
+# GETエンドポイント設定
 @app.route('/quote')
 def get_quote():
     quotes = Quote.query.all()
@@ -21,7 +22,22 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
 
 
-
+# POSTエンドポイント設定
+@app.route('/quotes/<int:id>', methods=['PUT'])
+def update_quote(id):
+    quote = Quote.query.get(id)
+    if quote:
+        new_text = request.json.get('text')
+        if new_text:
+            quote.text = new_text
+            db.session.commit()
+            return jsonify({'message': 'Quote updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Text field is required'}), 400
+    else:
+        return jsonify({'error': 'Quote not found'}), 404
+    
+# PUTエンドポイント設定 
 @app.route('/quotes/<int:id>', methods=['PUT'])
 def update_quote(id):
     quote = Quote.query.get(id)
