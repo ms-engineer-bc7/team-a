@@ -1,17 +1,30 @@
 from flask import Flask, jsonify
+from flask_migrate import Migrate
+from .models import db
 from flask_sqlalchemy import SQLAlchemy
 import random
 from flask import request
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
-db = SQLAlchemy(app)
+
+
 
 class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String, nullable=False)
 
 # GETエンドポイント設定
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
+db = SQLAlchemy(app)
+
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
+
+# db オブジェクトの初期化
+db.init_app(app)
+migrate = Migrate(app, db)
+
+
 @app.route('/quote')
 def get_quote():
     quotes = Quote.query.all()
