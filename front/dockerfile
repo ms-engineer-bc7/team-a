@@ -1,11 +1,22 @@
-FROM node:lts
+FROM node:18
 
-WORKDIR /usr/src/myapp
+# アプリケーションの作業ディレクトリを設定
+WORKDIR /usr/src/app
 
-COPY . .
+# package.jsonとpackage-lock.jsonをコピー
+COPY package*.json ./
 
+# 依存関係をインストール
 RUN npm install
 
+# ソースコードをコピー
+COPY . .
+
+# アプリケーションをビルド
+RUN npm run build
+
+# アプリケーションが使用するポートを公開
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+# アプリケーションを実行
+CMD ["npm", "start"]
