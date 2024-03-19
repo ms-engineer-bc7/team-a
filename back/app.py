@@ -1,6 +1,15 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from model import db
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
+
+# db オブジェクトの初期化
+db.init_app(app)
+migrate = Migrate(app, db)
+
 
 @app.route('/')
 def index():
@@ -8,4 +17,5 @@ def index():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-#host='0.0.0.0', port=5000
+
+
