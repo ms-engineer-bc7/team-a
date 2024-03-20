@@ -36,19 +36,20 @@ if __name__ == '__main__':
 
 
 # POSTエンドポイント設定
-@app.route('/quotes/<int:id>', methods=['PUT'])
-def update_quote(id):
-    quote = Quote.query.get(id)
-    if quote:
-        new_text = request.json.get('text')
-        if new_text:
-            quote.text = new_text
-            db.session.commit()
-            return jsonify({'message': '名言の登録が成功しました'}), 200
-        else:
-            return jsonify({'error': 'テキストの入力をしてください'}), 400
+@app.route('/quotes', methods=['POST'])
+def create_quote():
+    # request.jsonから新しい名言のテキストを取得
+    new_text = request.json.get('text')
+    if new_text:
+        # 新しいQuoteオブジェクトを作成し、データベースに追加
+        new_quote = Quote(text=new_text)
+        db.session.add(new_quote)
+        db.session.commit()
+        # 成功のメッセージを返す
+        return jsonify({'message': '新しい名言の登録が成功しました'}), 201
     else:
-        return jsonify({'error': '名言が見当たりません'}), 404
+        # テキストが提供されなかった場合のエラーメッセージ
+        return jsonify({'error': 'テキストの入力をしてください'}), 400
     
 # PUTエンドポイント設定 
 @app.route('/quotes/<int:id>', methods=['PUT'])
