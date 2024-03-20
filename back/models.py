@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+# from extensions import db  # extensionsから更新されたインポート
 
 db = SQLAlchemy()
 
@@ -33,3 +34,12 @@ class EmotionTable(db.Model):
 
     positives = db.relationship('PositiveTable', back_populates='emotion')
     encouragements = db.relationship('EncourageTable', back_populates='emotion')
+
+# Quoteモデルもここに含めるか、別のファイルに配置する
+    # Quoteモデルの定義
+# Quoteモデルの追加
+class Quote(db.Model):
+    __tablename__ = 'quote_table'  # テーブル名を指定
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String, nullable=False)
+    # 必要に応じて他のカラムを追加

@@ -43,6 +43,7 @@ RUN pip install Flask-JSON
 
 # 必要な依存関係をインストール
 RUN pip install Flask-Migrate
+RUN pip install flask_migrate flask_sqlalchemy 
 
 # ポートを公開
 # EXPOSE 5000
@@ -50,3 +51,5 @@ RUN pip install Flask-Migrate
 # コンテナ内で実行するコマンドを指定
 CMD ["flask", "run"]
 # CMD ["python", "app.py"]
+
+

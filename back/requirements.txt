@@ -1,7 +1,8 @@
 Flask==3.0.2
 SQLAlchemy==2.0.28
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
 flask-restful==0.3.10
 Flask-JSON==0.4.0
 Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.0.7
+Flask-RESTful==0.3.10
