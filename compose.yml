@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     tty: true
-    stdin_open: true
+    stdin_open: true  
 
   db:
     image: postgres:latest
