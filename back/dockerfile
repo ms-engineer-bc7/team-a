@@ -43,6 +43,7 @@ RUN pip install Flask-JSON
 
 # 必要な依存関係をインストール
 RUN pip install Flask-Migrate
+RUN pip install Flask-Cors
 
 # ポートを公開
 # EXPOSE 5000

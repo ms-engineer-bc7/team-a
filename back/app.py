@@ -10,7 +10,13 @@ from random import choice
 # app.py
 from .models import db
 from .models import Emotion, Encourage, Positive
+from flask_cors import CORS
 # import logging
+
+app = Flask(__name__)
+CORS(app)
+# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
 
 # ログの設定
 # dictConfig({
@@ -44,7 +50,7 @@ from .models import Emotion, Encourage, Positive
 
 # LOGFILE_NAME = "DEBUG.log"
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # app.logger.setLevel(logging.DEBUG)
 # log_handler = logging.FileHandler(LOGFILE_NAME)
@@ -187,5 +193,5 @@ if __name__ == '__main__':
 # def index():
 #     return 'Hello, World!'
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
