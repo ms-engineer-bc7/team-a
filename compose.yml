@@ -6,6 +6,8 @@ services:
       - "3000:3000"
     depends_on:
       - flask_app
+    volumes:
+      - ./back:/app
 
   flask_app:
     build: ./back
@@ -15,6 +17,8 @@ services:
       - db
     tty: true
     stdin_open: true
+    volumes:
+      - ./back:/app
 
   db:
     image: postgres:latest
@@ -27,7 +31,6 @@ services:
       POSTGRES_PASSWORD: quotes
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./back:/app
 
   pgadmin:
     image: dpage/pgadmin4
