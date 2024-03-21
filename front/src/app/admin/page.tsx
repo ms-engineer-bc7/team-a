@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
-import { createQuote } from '../components/fetch';
+import { createQuote, getQuotes, } from '../components/fetch';
 
 const emotionMap = {
     '🥹': 1,
@@ -14,7 +14,17 @@ const Admin: NextPage = () => {
   const [author, setAuthor] = useState('');
   const [comment, setComment] = useState('');
   const [emotionId, setEmotionId] = useState(0);
+  const [quotes, setQuotes] = useState([]);
+  const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
 
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      const data = await getQuotes();
+      setQuotes(data);
+    };
+
+    fetchQuotes();
+  }, []);
 
   const handleEmotionClick = (emotion: string) => {
     setEmotionId(emotionMap[emotion]);
@@ -62,12 +72,23 @@ const Admin: NextPage = () => {
           onChange={(e) => setComment(e.target.value)}
           placeholder="コメント"
         />
-        <button type="button" onClick={() => handleEmotionClick('🥹')}>🥹</button>
-        <button type="button" onClick={() => handleEmotionClick('😢')}>😢</button>
-        <button type="button" onClick={() => handleEmotionClick('😭')}>😭</button>
-        <div>選択した感情: {emotionId !== null ? Object.keys(emotionMap).find(key => emotionMap[key] === emotionId) : '未選択'}</div>
+        <button type="button" onClick={() => handleEmotionClick('🥹')} style={{ fontSize: '25px' }}>🥹</button>
+        <button type="button" onClick={() => handleEmotionClick('😢')} style={{ fontSize: '25px' }}>😢</button>
+        <button type="button" onClick={() => handleEmotionClick('😭')} style={{ fontSize: '25px' }}>😭</button>
+        <div style={{ fontSize: '2em' }}>{emotionId !== null ? Object.keys(emotionMap).find(key => emotionMap[key] === emotionId) : '未選択'}</div>
         <button type="submit">追加</button>
       </form>
+      {/* 既存の名言リストと編集フォーム */}
+      {quotes.map(quote => (
+        <div key={quote.id}>
+          <p>{quote.quote}</p>
+          <button onClick={() => setSelectedQuoteId(quote.id)}>編集</button>
+        </div>
+      ))}
+      {/* <QuoteForm
+        selectedQuoteId={selectedQuoteId}
+        onOperationComplete={() => setSelectedQuoteId(null)}
+      /> */}
     </div>
   );
 };

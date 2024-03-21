@@ -10,7 +10,7 @@ const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ quote, author, comment }) =
   return (
     <div>
       {/* 引用文は必ず表示する */}
-      <p>{`引用文: "${quote}"`}</p>
+      <p>{`名言: "${quote}"`}</p>
       
       {/* 著者名が空でない場合のみ表示する */}
       {author && <p>{`著者: ${author}`}</p>}

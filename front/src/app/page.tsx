@@ -26,9 +26,9 @@ const Home: NextPage = () => {
           </button>
         </Link>
       </div>
-      <QuoteButton emotionLevel={1} onQuoteFetch={handleQuoteFetch} />
-      <QuoteButton emotionLevel={2} onQuoteFetch={handleQuoteFetch} />
-      <QuoteButton emotionLevel={3} onQuoteFetch={handleQuoteFetch} />
+      <QuoteButton emotion="🥹" onQuoteFetch={handleQuoteFetch} />
+      <QuoteButton emotion="😢" onQuoteFetch={handleQuoteFetch} />
+      <QuoteButton emotion="😭" onQuoteFetch={handleQuoteFetch} />
       <QuoteDisplay quote={quoteData.quote} author={quoteData.author} comment={quoteData.comment} />
     </div>
   );
