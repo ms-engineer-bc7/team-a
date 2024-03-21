@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 # package.jsonとpackage-lock.jsonをコピー
 COPY package*.json ./
-COPY package-lock.json .
+# COPY package-lock.json .
 
 # 依存関係をインストール
 RUN npm install
@@ -14,10 +14,11 @@ RUN npm install
 COPY . .
 
 # アプリケーションをビルド
-RUN npm run build
+# RUN npm run build
 
 # アプリケーションが使用するポートを公開
 EXPOSE 3000
 
 # アプリケーションを実行
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
