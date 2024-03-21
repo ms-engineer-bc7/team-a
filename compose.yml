@@ -27,6 +27,7 @@ services:
       POSTGRES_PASSWORD: quotes
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./back:/app
 
   pgadmin:
     image: dpage/pgadmin4
