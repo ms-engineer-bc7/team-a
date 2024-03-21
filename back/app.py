@@ -1,3 +1,4 @@
+from logging.config import dictConfig
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -5,23 +6,102 @@ from flask_migrate import Migrate
 from . import models
 # db, Quote
 import random
+from random import choice
+# app.py
+from .models import db
+from .models import Emotion, Encourage, Positive
+# import logging
+
+# ログの設定
+# dictConfig({
+#     'version': 1,
+#     'formatters': {
+#         'default': {
+#             'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#         },
+#         'access': {
+#             'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+#                       '%(status)d %(byte)d "%(user_agent)s" "%(remote_addr)s"',
+#         },
+#     },
+#     'handlers': {
+#         'wsgi': {
+#             'class': 'logging.StreamHandler',
+#             'stream': 'ext://flask.logging.wsgi_errors_stream',
+#             'formatter': 'default'
+#         },
+#         'access': {
+#             'class': 'logging.FileHandler',
+#             'filename': 'access.log',
+#             'formatter': 'access',
+#         },
+#     },
+#     'root': {
+#         'level': 'INFO',
+#         'handlers': ['wsgi', 'access']
+#     }
+# })
+
+# LOGFILE_NAME = "DEBUG.log"
 
 app = Flask(__name__)
+
+# app.logger.setLevel(logging.DEBUG)
+# log_handler = logging.FileHandler(LOGFILE_NAME)
+# log_handler.setLevel(logging.DEBUG)
+# app.logger.addHandler(log_handler)
+
+
+# # ログレベルを設定
+# app.logger.setLevel(logging.DEBUG)  # 例: DEBUG, INFO, WARNING, ERROR
+
+# # ログフォーマットを設定
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# # ログハンドラーを設定（ファイルに書き込む場合）
+# file_handler = logging.FileHandler('app.log')
+# file_handler.setLevel(logging.DEBUG)  # ログレベルを設定
+# file_handler.setFormatter(formatter)
+# app.logger.addHandler(file_handler)
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
-db = SQLAlchemy(app)
-# db オブジェクトの初期化
-# db.init_app(app)
+
+# db オブジェクトの初期化どっちか片方でいい？
+# db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
 
 # モデルをインポート
 # from models import Quote
 
-@app.route('/quote')
-def get_quote():
-    quotes = Quote.query.all()
-    random_quote = random.choice(quotes)
-    return jsonify({'quote': random_quote.text})
+@app.route('/quotes', methods=['GET'])
+def get_all_quotes():
+    emotions = Emotion.query.all()
+    encourages = Encourage.query.all()
+    positives = Positive.query.all()
+    print(emotions)
+    # 全てのテーブルから取得したデータを統合
+    all_quotes = []
+    for quote in encourages + positives:
+        all_quotes.append({
+            'id': quote.id,
+            'quote': quote.quote,
+            'author': quote.author,
+            'comment': quote.comment,
+            'emotion_id': quote.emotion_id
+        })
+
+    # Emotion データも追加する場合
+    for emotion in emotions:
+        all_quotes.append({
+            'id': emotion.id,
+            'emotion': emotion.emotion,
+            'value': str(emotion.value)  # Numeric型はJSONシリアライズのために文字列に変換
+        })
+
+    return jsonify(all_quotes)
+
 
 # POSTエンドポイント設定
 @app.route('/quotes', methods=['POST'])
@@ -72,6 +152,29 @@ if __name__ == '__main__':
 
 
 
+# #ランダムに取得
+# @app.route('/quote')
+# def get_quote():
+#     quotes = Quote.query.all()
+#     random_quote = random.choice(quotes)
+#     return jsonify({'quote': random_quote.text})
+
+# #全てを取得する
+# @app.route('/quotes', methods=['GET'])
+# def get_all_quotes():
+#     quotes = Quote.query.all()
+#     quotes_list = [{'id': quote.id, 'text': quote.text} for quote in quotes]
+#     return jsonify(quotes_list)
+
+# #emotion_IDに対応する全てのエントリを取得しそのリストからランダムに1つ選択
+# @app.route('/emotions/<int:emotion_ID>/random')
+# def get_random_emotion(emotion_ID):
+#     emotions = Emotion.query.filter_by(emotion_ID=emotion_ID).all()
+#     random_emotion = choice(emotions) if emotions else None
+#     if random_emotion:
+#         return jsonify({'value': random_emotion.value})
+#     else:
+#         return jsonify({'error': '指定されたemotion_IDに対応するデータが見つかりません'}), 404
 
 
 
