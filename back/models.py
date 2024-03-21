@@ -2,6 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+class Quote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String, nullable=False)
+
+
 class PositiveTable(db.Model):
     __tablename__ = 'positive_table'
     
@@ -33,3 +38,4 @@ class EmotionTable(db.Model):
 
     positives = db.relationship('PositiveTable', back_populates='emotion')
     encouragements = db.relationship('EncourageTable', back_populates='emotion')
+

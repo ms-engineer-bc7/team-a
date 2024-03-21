@@ -1,39 +1,27 @@
-from flask import Flask, jsonify
-from flask_migrate import Migrate
-from .models import db
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+# from models 
+from . import models
+# db, Quote
 import random
-from flask import request
 
-
-
-
-class Quote(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String, nullable=False)
-
-# GETエンドポイント設定
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
-db = SQLAlchemy(app)
-
-# app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
-
+db = SQLAlchemy(app)
 # db オブジェクトの初期化
-db.init_app(app)
+# db.init_app(app)
 migrate = Migrate(app, db)
 
+# モデルをインポート
+# from models import Quote
 
 @app.route('/quote')
 def get_quote():
     quotes = Quote.query.all()
     random_quote = random.choice(quotes)
     return jsonify({'quote': random_quote.text})
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
-
 
 # POSTエンドポイント設定
 @app.route('/quotes', methods=['POST'])
@@ -77,6 +65,8 @@ def delete_quote(id):
     else:
         return jsonify({'error': '名言が見当たりません'}), 404
 
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
 
 
