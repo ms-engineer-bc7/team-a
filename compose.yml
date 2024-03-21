@@ -1,11 +1,11 @@
 version: "3"
 services:
-  next_app:
-    build: ./front
-    ports:
-      - "3000:3000"
-    depends_on:
-      - flask_app
+  # next_app:
+  #   build: ./front
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - flask_app
 
   flask_app:
     build: ./back

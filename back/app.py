@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import db, Quote
+# from models 
+from . import models
+# db, Quote
 import random
 
 app = Flask(__name__)
@@ -9,11 +11,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quot
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
 db = SQLAlchemy(app)
 # db オブジェクトの初期化
-db.init_app(app)
+# db.init_app(app)
 migrate = Migrate(app, db)
 
 # モデルをインポート
-from models import Quote
+# from models import Quote
 
 @app.route('/quote')
 def get_quote():
