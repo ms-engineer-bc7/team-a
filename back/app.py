@@ -9,9 +9,24 @@ from random import choice
 # app.py
 from .models import db
 from .models import Emotion, Encourage, Positive
+import logging
 
 
 app = Flask(__name__)
+
+# ログレベルを設定
+app.logger.setLevel(logging.DEBUG)  # 例: DEBUG, INFO, WARNING, ERROR
+
+# ログフォーマットを設定
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# ログハンドラーを設定（ファイルに書き込む場合）
+file_handler = logging.FileHandler('app.log')
+file_handler.setLevel(logging.DEBUG)  # ログレベルを設定
+file_handler.setFormatter(formatter)
+app.logger.addHandler(file_handler)
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db/quotesdb'
 db = SQLAlchemy(app)
@@ -48,34 +63,6 @@ def get_all_quotes():
         })
 
     return jsonify(all_quotes)
-
-
-
-
-
-# #ランダムに取得
-# @app.route('/quote')
-# def get_quote():
-#     quotes = Quote.query.all()
-#     random_quote = random.choice(quotes)
-#     return jsonify({'quote': random_quote.text})
-
-# #全てを取得する
-# @app.route('/quotes', methods=['GET'])
-# def get_all_quotes():
-#     quotes = Quote.query.all()
-#     quotes_list = [{'id': quote.id, 'text': quote.text} for quote in quotes]
-#     return jsonify(quotes_list)
-
-# #emotion_IDに対応する全てのエントリを取得しそのリストからランダムに1つ選択
-# @app.route('/emotions/<int:emotion_ID>/random')
-# def get_random_emotion(emotion_ID):
-#     emotions = Emotion.query.filter_by(emotion_ID=emotion_ID).all()
-#     random_emotion = choice(emotions) if emotions else None
-#     if random_emotion:
-#         return jsonify({'value': random_emotion.value})
-#     else:
-#         return jsonify({'error': '指定されたemotion_IDに対応するデータが見つかりません'}), 404
 
 
 # POSTエンドポイント設定
@@ -127,6 +114,29 @@ if __name__ == '__main__':
 
 
 
+# #ランダムに取得
+# @app.route('/quote')
+# def get_quote():
+#     quotes = Quote.query.all()
+#     random_quote = random.choice(quotes)
+#     return jsonify({'quote': random_quote.text})
+
+# #全てを取得する
+# @app.route('/quotes', methods=['GET'])
+# def get_all_quotes():
+#     quotes = Quote.query.all()
+#     quotes_list = [{'id': quote.id, 'text': quote.text} for quote in quotes]
+#     return jsonify(quotes_list)
+
+# #emotion_IDに対応する全てのエントリを取得しそのリストからランダムに1つ選択
+# @app.route('/emotions/<int:emotion_ID>/random')
+# def get_random_emotion(emotion_ID):
+#     emotions = Emotion.query.filter_by(emotion_ID=emotion_ID).all()
+#     random_emotion = choice(emotions) if emotions else None
+#     if random_emotion:
+#         return jsonify({'value': random_emotion.value})
+#     else:
+#         return jsonify({'error': '指定されたemotion_IDに対応するデータが見つかりません'}), 404
 
 
 
