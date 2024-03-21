@@ -6,6 +6,10 @@ from . import models
 # db, Quote
 import random
 from random import choice
+# app.py
+from .models import db
+from .models import Emotion, Encourage, Positive
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://quotes:quotes@db:5432/quotesdb'
@@ -14,7 +18,7 @@ db = SQLAlchemy(app)
 # db オブジェクトの初期化
 # db.init_app(app)
 migrate = Migrate(app, db)
-from models import db, Emotion, Encourage, Positive  # 正しいインポートパスを確認してください
+
 # モデルをインポート
 # from models import Quote
 
