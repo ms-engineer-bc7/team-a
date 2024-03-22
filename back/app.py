@@ -125,7 +125,6 @@ def create_quote():
         # テキストが提供されなかった場合のエラーメッセージ
         return jsonify({'error': 'テキストの入力をしてください'}), 400
 
-
 # Positive の更新 (PUT)
 @app.route('/positives/<int:id>', methods=['PUT'])
 def update_positive(id):
