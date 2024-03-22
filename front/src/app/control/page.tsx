@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from 'next/navigation'; // 追加
 import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
 import { createQuote, getQuotes, deleteQuote } from '../components/fetch';
@@ -16,6 +17,7 @@ const Admin: NextPage = () => {
   const [emotionId, setEmotionId] = useState<number | null>(null);
   const [quotes, setQuotes] = useState<any[]>([]); // 一時的にany[]型で設定
   const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
+  const router = useRouter();
 
   const fetchQuotes = async () => {
     try {
@@ -25,6 +27,8 @@ const Admin: NextPage = () => {
       console.error(error);
     }
   };
+
+
 
   useEffect(() => {
     fetchQuotes();
@@ -57,13 +61,18 @@ const Admin: NextPage = () => {
   };
 
   const handleDelete = async (id: number, resourceType: string) => {
-    try {
-      await deleteQuote(id, resourceType); // resourceTypeを引数として渡す
-      // 削除後の名言リストを再取得
-      fetchQuotes();
-    } catch (error) {
-      console.error(error);
+    // ユーザーに確認を求める
+    const isConfirmed = window.confirm('本当に削除しますか？');
+    if (isConfirmed) {
+      // 確認が取れた場合のみ削除を実行
+      try {
+        await deleteQuote(id, resourceType);
+        fetchQuotes(); // 削除後の名言リストを再取得
+      } catch (error) {
+        console.error(error);
+      }
     }
+    // ユーザーがキャンセルを選択した場合、ここには到達しない
   };
 
   return (
@@ -82,6 +91,8 @@ const Admin: NextPage = () => {
        {/* 削除ボタン */}
         </div>
       ))}
+      {/* "管理画面へ戻る"ボタンを追加 */}
+      <button onClick={() => router.push('/admin')}>管理画面へ戻る</button>
     </div>
   );
 };
