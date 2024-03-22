@@ -1,6 +1,7 @@
 //管理画面用fetchでAPIリクエスト
 const apiUrl = 'http://localhost:5000/quotes'; //APIのURL
-
+const apiUrl2 = 'http://localhost:5000/encourages'; // APIのURLを修正
+const apiUrl3 = 'http://localhost:5000/positives'; // APIのURLを修正
 interface Quote {
   id?: number;
   quote: string;
@@ -58,7 +59,7 @@ const updateQuote = async (id: number, quote: Quote) => {
 };
 
 const deleteQuote = async (id: number) => {
-  const response = await fetch(`${apiUrl}/${id}`, {
+  const response = await fetch(`${apiUrl2}/${id}`, {
     method: 'DELETE',
   });
 
@@ -69,4 +70,16 @@ const deleteQuote = async (id: number) => {
   return response.json();
 };
 
-export { getQuotes, getQuoteById, createQuote, updateQuote, deleteQuote };
+const deleteQuote2 = async (id: number) => {
+  const response = await fetch(`${apiUrl3}/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Something went wrong');
+  }
+
+  return response.json();
+};
+
+export { getQuotes, getQuoteById, createQuote, updateQuote, deleteQuote, deleteQuote2};
