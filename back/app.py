@@ -243,16 +243,11 @@ if __name__ == '__main__':
 #     else:
 #         return jsonify({'error': '指定されたemotion_IDに対応するデータが見つかりません'}), 404
 
-
-
-
-
-
 # app = Flask(__name__)
 
 # @app.route('/')
 # def index():
 #     return 'Hello, World!'
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)
