@@ -10,7 +10,7 @@ const emotionMap: { [key: string]: number } = {
     '😭': 3,
 };
 
-const Admin: NextPage = () => {
+const AdminEditQuote: NextPage = () => {
   const [quote, setQuote] = useState('');
   const [author, setAuthor] = useState('');
   const [comment, setComment] = useState('');
@@ -97,7 +97,7 @@ const Admin: NextPage = () => {
   );
 };
 
-export default Admin;
+export default AdminEditQuote;
 
 
 
