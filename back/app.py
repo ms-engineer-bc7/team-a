@@ -9,6 +9,7 @@ import random
 from random import choice
 # app.py
 from .models import db
+# from .models import Quote  # 同一ディレクトリ内の場合
 from .models import Emotion, Encourage, Positive
 from flask_cors import CORS
 # import logging
@@ -108,7 +109,6 @@ def get_all_quotes():
 
     return jsonify(all_quotes)
 
-
 # POSTエンドポイント設定
 @app.route('/quotes', methods=['POST'])
 def create_quote():
@@ -124,32 +124,93 @@ def create_quote():
     else:
         # テキストが提供されなかった場合のエラーメッセージ
         return jsonify({'error': 'テキストの入力をしてください'}), 400
-    
-# PUTエンドポイント設定 
-@app.route('/quotes/<int:id>', methods=['PUT'])
-def update_quote(id):
-    quote = Quote.query.get(id)
-    if quote:
-        new_text = request.json.get('text')
-        if new_text:
-            quote.text = new_text
-            db.session.commit()
-            return jsonify({'message': '名言の更新が成功しました'}), 200
+
+# Positive の更新 (PUT)
+@app.route('/positives/<int:id>', methods=['PUT'])
+def update_positive(id):
+    data = request.json
+    positive = Positive.query.get_or_404(id)
+
+    if 'quote' in data:
+        positive.quote = data['quote']
+    if 'author' in data:
+        positive.author = data.get('author', None)  # 'None' はデフォルト値
+    if 'comment' in data:
+        positive.comment = data.get('comment', None)
+    if 'emotion_id' in data:
+        emotion = Emotion.query.get(data['emotion_id'])
+        if emotion:
+            positive.emotion_id = emotion.id
         else:
-            return jsonify({'error': 'テキストの入力をしてください'}), 400
-    else:
-        return jsonify({'error': '名言が見当たりません'}), 404
+            return jsonify({'error': '指定されたEmotionが存在しません'}), 404
     
+    db.session.commit()
+    return jsonify({'message': 'Positiveが更新されました'}), 200
+
+# Encourageの更新(PUT)
+@app.route('/encourages/<int:id>', methods=['PUT'])
+def update_encourage(id):
+    data = request.json
+    encourage = Encourage.query.get_or_404(id)
+
+    if 'quote' in data:
+        encourage.quote = data['quote']
+    if 'author' in data:
+        encourage.author = data.get('author', None)  # 'None' はデフォルト値
+    if 'comment' in data:
+        encourage.comment = data.get('comment', None)
+    if 'emotion_id' in data:
+        emotion = Emotion.query.get(data['emotion_id'])
+        if emotion:
+            encourage.emotion_id = emotion.id
+        else:
+            return jsonify({'error': '指定されたEmotionが存在しません'}), 404
+    # 更新処理...
+    return jsonify({'message': 'Encourageが更新されました'}), 200
+
+
+# PUTエンドポイント設定 
+# @app.route('/quotes/<int:id>', methods=['PUT'])
+# def update_quote(id):
+#     quote = Quote.query.get(id)
+#     if quote:
+#         new_text = request.json.get('text')
+#         if new_text:
+#             quote.text = new_text
+#             db.session.commit()
+#             return jsonify({'message': '名言の更新が成功しました'}), 200
+#         else:
+#             return jsonify({'error': 'テキストの入力をしてください'}), 400
+#     else:
+#         return jsonify({'error': '名言が見当たりません'}), 404
+
+# Positiveの削除(DELETE)
+@app.route('/positives/<int:id>', methods=['DELETE'])
+def delete_positive(id):
+    positive = Positive.query.get_or_404(id)
+    db.session.delete(positive)
+    db.session.commit()
+    return jsonify({'message': 'Positiveが削除されました'}), 200
+
+# Encourageの削除(DELETE)
+@app.route('/encourages/<int:id>', methods=['DELETE'])
+def delete_encourage(id):
+    encourage = Encourage.query.get_or_404(id)
+    db.session.delete(encourage)
+    db.session.commit()
+    # 削除処理...
+    return jsonify({'message': 'Encourageが削除されました'}), 200
+
 # DELETEエンドポイント設定
-@app.route('/quotes/<int:id>', methods=['DELETE'])
-def delete_quote(id):
-    quote = Quote.query.get(id)
-    if quote:
-        db.session.delete(quote)
-        db.session.commit()
-        return jsonify({'message': '名言の削除が成功しました'}), 200
-    else:
-        return jsonify({'error': '名言が見当たりません'}), 404
+# @app.route('/quotes/<int:id>', methods=['DELETE'])
+# def delete_quote(id):
+#     quote = Quote.query.get(id)
+#     if quote:
+#         db.session.delete(quote)
+#         db.session.commit()
+#         return jsonify({'message': '名言の削除が成功しました'}), 200
+#     else:
+#         return jsonify({'error': '名言が見当たりません'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
@@ -182,16 +243,11 @@ if __name__ == '__main__':
 #     else:
 #         return jsonify({'error': '指定されたemotion_IDに対応するデータが見つかりません'}), 404
 
-
-
-
-
-
 # app = Flask(__name__)
 
 # @app.route('/')
 # def index():
 #     return 'Hello, World!'
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)
