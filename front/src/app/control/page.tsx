@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
 import { createQuote, getQuotes, deleteQuote } from '../components/fetch';
@@ -72,8 +73,8 @@ const Admin: NextPage = () => {
         {/* フォームの内容 */}
       </form>
       {/* 既存の名言リストと編集フォーム */}
-      {quotes.map((quote: any) => (
-        <div key={quote.id}>
+      {quotes.map((quote: any, index: number) => (
+          <div key={index}>
           <p>{quote.quote}</p>
           <button onClick={() => setSelectedQuoteId(quote.id)}>編集</button>
           <button onClick={() => handleDelete(quote.id)}>削除</button> {/* 削除ボタン */}
