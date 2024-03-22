@@ -56,9 +56,13 @@ const Admin: NextPage = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number, resourceType: string) => {
     try {
-      await deleteQuote(id);
+      if (resourceType === 'quote') {
+        await deleteQuote(id); // ポジティブな名言の削除
+      } else if (resourceType === 'encourage') {
+        await deleteQuote(id); // エンカレッジメントの削除
+      }
       // 削除後の名言リストを再取得
       fetchQuotes();
     } catch (error) {
@@ -77,7 +81,7 @@ const Admin: NextPage = () => {
           <div key={index}>
           <p>{quote.quote}</p>
           <button onClick={() => setSelectedQuoteId(quote.id)}>編集</button>
-          <button onClick={() => handleDelete(quote.id)}>削除</button> {/* 削除ボタン */}
+          <button onClick={() => handleDelete(quote.id, 'quote')}>削除</button> {/* 削除ボタン */}
         </div>
       ))}
     </div>
