@@ -58,8 +58,17 @@ const updateQuote = async (id: number, quote: Quote) => {
   return response.json();
 };
 
-const deleteQuote = async (id: number) => {
-  const response = await fetch(`${apiUrl2}/${id}`, {
+const deleteQuote = async (id: number, resourceType: string) => {
+  let url;
+  if (resourceType === 'encourage') {
+    url = `${apiUrl2}/${id}`;
+  } else if (resourceType === 'positive') {
+    url = `${apiUrl3}/${id}`;
+  } else {
+    throw new Error('Invalid resource type');
+  }
+
+  const response = await fetch(url, {
     method: 'DELETE',
   });
 
@@ -70,16 +79,31 @@ const deleteQuote = async (id: number) => {
   return response.json();
 };
 
-const deleteQuote2 = async (id: number) => {
-  const response = await fetch(`${apiUrl3}/${id}`, {
-    method: 'DELETE',
-  });
 
-  if (!response.ok) {
-    throw new Error('Something went wrong');
-  }
 
-  return response.json();
-};
 
-export { getQuotes, getQuoteById, createQuote, updateQuote, deleteQuote, deleteQuote2};
+// const deleteQuote = async (id: number) => {
+//   const response = await fetch(`${apiUrl2}/${id}`, {
+//     method: 'DELETE',
+//   });
+
+//   if (!response.ok) {
+//     throw new Error('Something went wrong');
+//   }
+
+//   return response.json();
+// };
+
+// const deleteQuote2 = async (id: number) => {
+//   const response = await fetch(`${apiUrl3}/${id}`, {
+//     method: 'DELETE',
+//   });
+
+//   if (!response.ok) {
+//     throw new Error('Something went wrong');
+//   }
+
+//   return response.json();
+// };
+
+export { getQuotes, getQuoteById, createQuote, updateQuote, deleteQuote };
