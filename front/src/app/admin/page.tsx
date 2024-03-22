@@ -97,12 +97,13 @@ const AdminQuotes: NextPage = () => {
         <button type="submit">追加</button>
       </form>
       {/* 既存の名言リストと編集フォーム */}
-      {quotes.map((item) => (
+      <button onClick={() => router.push('/control')}>編集画面へ</button>
+      {/* {quotes.map((item) => (
         <div key={`${item.table_name}-${item.id}`}>
           <p>{(item).quote}</p>
           <button onClick={() => handleEditClick(`${item.table_name}-${item.id}`)}>編集</button>
         </div>
-      ))}
+      ))} */}
       {/* <QuoteForm
         selectedQuoteId={selectedQuoteId}
         onOperationComplete={() => setSelectedQuoteId(null)}
