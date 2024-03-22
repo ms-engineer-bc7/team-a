@@ -15,11 +15,15 @@ const Admin: NextPage = () => {
   const [comment, setComment] = useState('');
   const [emotionId, setEmotionId] = useState(0);
   const [quotes, setQuotes] = useState([]);
-  const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
+  // const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
+  // 初期状態を変更してオブジェクトを扱えるようにする
+  const [selectedQuoteId, setSelectedQuoteId] = useState<{ tableName: string, id: number } | null>(null);
+  const [table, setTable] = useState('encourage');  // 初期状態は 'encourage'
 
   useEffect(() => {
     const fetchQuotes = async () => {
       const data = await getQuotes();
+      console.log(data); // これで配列を出力
       setQuotes(data);
     };
 
@@ -37,10 +41,11 @@ const Admin: NextPage = () => {
         return;
       }
     try {
-      const newQuote = { quote, author, comment, emotion_id: emotionId };
+      const newQuote = { table, quote, author, comment, emotion_id: emotionId };
       await createQuote(newQuote);
       alert('新しい名言を追加しました');
       // フォームをリセット
+      setTable('encourage');
       setQuote('');
       setAuthor('');
       setComment('');
@@ -50,10 +55,15 @@ const Admin: NextPage = () => {
     }
   };
 
+
   return (
     <div>
       <h1>管理画面</h1>
       <form onSubmit={handleSubmit}>
+      <select value={table} onChange={(e) => setTable(e.target.value)}>
+        <option value="encourage">Encourage</option>
+        <option value="positive">Positive</option>
+      </select>
         <input
           type="text"
           value={quote}
@@ -79,10 +89,10 @@ const Admin: NextPage = () => {
         <button type="submit">追加</button>
       </form>
       {/* 既存の名言リストと編集フォーム */}
-      {quotes.map(quote => (
-        <div key={quote.id}>
-          <p>{quote.quote}</p>
-          <button onClick={() => setSelectedQuoteId(quote.id)}>編集</button>
+      {quotes.map((item) => (
+        <div key={`${item.table_name}-${item.id}`}>
+          <p>{(item).quote}</p>
+          <button onClick={() => setSelectedQuoteId(`${item.table_name}-${item.id}`)}>編集</button>
         </div>
       ))}
       {/* <QuoteForm

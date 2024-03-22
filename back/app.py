@@ -12,7 +12,7 @@ from .models import db
 # from .models import Quote  # 同一ディレクトリ内の場合
 from .models import Emotion, Encourage, Positive
 from flask_cors import CORS
-# import logging
+import logging
 
 app = Flask(__name__)
 CORS(app)
@@ -84,14 +84,34 @@ migrate = Migrate(app, db)
 
 @app.route('/quotes', methods=['GET'])
 def get_all_quotes():
-    emotions = Emotion.query.all()
+    # emotions = Emotion.query.all()
     encourages = Encourage.query.all()
     positives = Positive.query.all()
-    print(emotions)
+    # print(emotions)
     # 全てのテーブルから取得したデータを統合
     all_quotes = []
-    for quote in encourages + positives:
+    # for quote in encourages + positives:
+    #     all_quotes.append({
+    #         'id': quote.id,
+    #         'quote': quote.quote,
+    #         'author': quote.author,
+    #         'comment': quote.comment,
+    #         'emotion_id': quote.emotion_id
+    #     })
+
+    for quote in positives:
         all_quotes.append({
+            'table_name': 'positives',  # テーブル名を追加
+            'id': quote.id,
+            'quote': quote.quote,
+            'author': quote.author,
+            'comment': quote.comment,
+            'emotion_id': quote.emotion_id
+        })
+
+    for quote in encourages:
+        all_quotes.append({
+            'table_name': 'encourages',  # テーブル名を追加
             'id': quote.id,
             'quote': quote.quote,
             'author': quote.author,
@@ -100,23 +120,46 @@ def get_all_quotes():
         })
 
     # Emotion データも追加する場合
-    for emotion in emotions:
-        all_quotes.append({
-            'id': emotion.id,
-            'emotion': emotion.emotion,
-            'value': str(emotion.value)  # Numeric型はJSONシリアライズのために文字列に変換
-        })
+    # for emotion in emotions:
+    #     all_quotes.append({
+    #         'table_name': 'emotions',  # テーブル名を追加
+    #         'id': emotion.id,
+    #         'emotion': emotion.emotion,
+    #         'value': str(emotion.value)  # Numeric型はJSONシリアライズのために文字列に変換
+    #     })
 
     return jsonify(all_quotes)
+
+# Flaskのログレベルを設定
+logging.basicConfig(level=logging.INFO)
 
 # POSTエンドポイント設定
 @app.route('/quotes', methods=['POST'])
 def create_quote():
-    # request.jsonから新しい名言のテキストを取得
-    new_text = request.json.get('text')
+    # request.jsonの内容をログに記録
+    logging.info('Received request: %s', request.json)
+
+    data = request.json
+    new_text = data.get('quote')  # 'quote'キーから新しい引用文を取得
+    # 取得したtextの値をログに出力
+    logging.info('Received text: %s', data)
+    logging.info('Received text: %s', new_text)
+
+    Model = Encourage if data['table'] == 'encourage' else Positive
+
+    if not all(key in data for key in ['quote', 'author', 'comment', 'emotion_id']):
+        return jsonify({'error': '全ての情報を入力してください'}), 400
+
     if new_text:
         # 新しいQuoteオブジェクトを作成し、データベースに追加
-        new_quote = Quote(text=new_text)
+        # new_quote =  Quote(quote=new_text, author=new_author, comment=new_comment, emotion_id=new_emotion_id)
+        new_quote = Model(
+        quote=data['quote'],
+        author=data['author'],
+        comment=data['comment'],
+        emotion_id=data['emotion_id']
+        )
+
         db.session.add(new_quote)
         db.session.commit()
         # 成功のメッセージを返す
