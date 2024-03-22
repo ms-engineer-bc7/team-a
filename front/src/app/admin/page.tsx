@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/navigation';
 import { createQuote, getQuotes, } from '../components/fetch';
 
 const emotionMap = {
@@ -9,7 +10,7 @@ const emotionMap = {
     '😭': 3,
   };
 
-const Admin: NextPage = () => {
+const AdminQuotes: NextPage = () => {
   const [quote, setQuote] = useState('');
   const [author, setAuthor] = useState('');
   const [comment, setComment] = useState('');
@@ -19,6 +20,7 @@ const Admin: NextPage = () => {
   // 初期状態を変更してオブジェクトを扱えるようにする
   const [selectedQuoteId, setSelectedQuoteId] = useState<{ tableName: string, id: number } | null>(null);
   const [table, setTable] = useState('encourage');  // 初期状態は 'encourage'
+  const router = useRouter();
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -53,6 +55,12 @@ const Admin: NextPage = () => {
     } catch (error) {
       alert('名言の追加に失敗しました');
     }
+  };
+
+  const handleEditClick = (id) => {
+    setSelectedQuoteId({ id });
+    // 編集ページへの遷移
+    router.push(`/control/${id}`);
   };
 
 
@@ -92,7 +100,7 @@ const Admin: NextPage = () => {
       {quotes.map((item) => (
         <div key={`${item.table_name}-${item.id}`}>
           <p>{(item).quote}</p>
-          <button onClick={() => setSelectedQuoteId(`${item.table_name}-${item.id}`)}>編集</button>
+          <button onClick={() => handleEditClick(`${item.table_name}-${item.id}`)}>編集</button>
         </div>
       ))}
       {/* <QuoteForm
@@ -103,4 +111,4 @@ const Admin: NextPage = () => {
   );
 };
 
-export default Admin;
+export default AdminQuotes;
