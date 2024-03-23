@@ -2,8 +2,9 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
-import { QuoteButton } from './components/button';
-import QuoteDisplay from './components/quote'; // 引用データを表示するコンポーネントをインポート
+import { QuoteButton } from './_components/button';
+import QuoteDisplay from './_components/quote';
+import { log } from './_utils/logger';
 
 const Home: NextPage = () => {
   const [quoteData, setQuoteData] = useState({
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
 
   const handleQuoteFetch = (data: {quote: string, author: string, comment: string}) => {
     setQuoteData(data);
+    log('Quote fetched:', data);  // デバッグ情報をログ出力
   };
 
   return (

@@ -1,6 +1,7 @@
 "use client";
-// QuoteButton.tsx (修正版)
 import { useState } from 'react';
+import { EMOTION_MAP, API_BASE_URL } from '../_utils/constants';
+
 
 // データを渡すためのコールバック関数
 interface QuoteButtonProps {
@@ -10,16 +11,11 @@ interface QuoteButtonProps {
 
 export const QuoteButton: React.FC<QuoteButtonProps> = ({ emotion, onQuoteFetch }) => {
   const [error, setError] = useState<string>('');
-  const emotionMap = {
-    '🥹': 1,
-    '😢': 2,
-    '😭': 3,
-  };
 
   const fetchQuote = async () => {
     try {
-      const emotionLevel = emotionMap[emotion];
-      const response = await fetch(`http://localhost:5000/quotes?emotion=${emotionLevel}`);
+      const emotionLevel = EMOTION_MAP[emotion];
+      const response = await fetch(`${API_BASE_URL}/quotes?emotion=${emotionLevel}`);
       if (!response.ok) {
         throw new Error('名言の取得に失敗しました');
       }
