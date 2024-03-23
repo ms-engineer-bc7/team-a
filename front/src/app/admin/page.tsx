@@ -4,12 +4,8 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { createQuote, getQuotes, } from '../_components/fetch';
 import { log } from '../_utils/logger';
+import { EMOTION_MAP } from '../_utils/constants';
 
-const emotionMap = {
-    '🥹': 1,
-    '😢': 2,
-    '😭': 3,
-  };
 
 const AdminQuotes: NextPage = () => {
   const [quote, setQuote] = useState('');
@@ -33,7 +29,7 @@ const AdminQuotes: NextPage = () => {
   }, []);
 
   const handleEmotionClick = (emotion: string) => {
-    setEmotionId(emotionMap[emotion]);
+    setEmotionId(EMOTION_MAP[emotion]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -96,7 +92,7 @@ const AdminQuotes: NextPage = () => {
         <button type="button" onClick={() => handleEmotionClick('🥹')} style={{ fontSize: '25px' }}>🥹</button>
         <button type="button" onClick={() => handleEmotionClick('😢')} style={{ fontSize: '25px' }}>😢</button>
         <button type="button" onClick={() => handleEmotionClick('😭')} style={{ fontSize: '25px' }}>😭</button>
-        <div style={{ fontSize: '2em' }}>{emotionId !== null ? Object.keys(emotionMap).find(key => emotionMap[key] === emotionId) : '未選択'}</div>
+        <div style={{ fontSize: '2em' }}>{emotionId !== null ? Object.keys(EMOTION_MAP).find(key => EMOTION_MAP[key] === emotionId) : '未選択'}</div>
         <button type="submit">追加</button>
       </form>
       {/* 既存の名言リストと編集フォーム */}

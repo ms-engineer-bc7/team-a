@@ -4,12 +4,8 @@ import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
 import { createQuote, getQuotes, deleteQuote } from '../_components/fetch';
 import { log } from '../_utils/logger';
+import { EMOTION_MAP } from '../_utils/constants';
 
-const emotionMap: { [key: string]: number } = {
-    '🥹': 1,
-    '😢': 2,
-    '😭': 3,
-};
 
 const AdminEditQuote: NextPage = () => {
   // const [quote, setQuote] = useState('');
@@ -36,7 +32,7 @@ const AdminEditQuote: NextPage = () => {
   }, []);
 
   const handleEmotionClick = (emotion: string) => {
-    setEmotionId(emotionMap[emotion]);
+    setEmotionId(EMOTION_MAP[emotion]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
