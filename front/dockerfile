@@ -16,6 +16,11 @@ RUN npm install -g firebase-tools
 # Firebase SDKのインストール
 RUN npm install firebase
 
+# JestとReact Testing LibraryとBabelとts-jestとjest-environment-jsdomをインストール
+RUN npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+RUN npm install --save-dev @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript
+RUN npm install --save-dev ts-jest@
+RUN npm install --save-dev jest-environment-jsdom
 # ソースコードをコピー
 COPY . .
 
