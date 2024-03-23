@@ -2,7 +2,7 @@
 import React, { useState, useEffect} from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
-import { createQuote, getQuotes, } from '../components/fetch';
+import { createQuote, getQuotes, } from '../_components/fetch';
 
 const emotionMap = {
     '🥹': 1,
