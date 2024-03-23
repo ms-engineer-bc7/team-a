@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { EMOTION_MAP, API_BASE_URL } from '../_utils/constants';
 
-
 // データを渡すためのコールバック関数
 interface QuoteButtonProps {
   emotion: string; 
@@ -22,7 +21,7 @@ export const QuoteButton: React.FC<QuoteButtonProps> = ({ emotion, onQuoteFetch 
       const data = await response.json();
       console.log(data);//取得出来ているか確認
       // emotion_id が emotionLevel と一致する名言の配列を作る
-    const matchingQuotes = data.filter(q => q.emotion_id === emotionLevel);
+    const matchingQuotes = data.filter((q: any) => q.emotion_id === emotionLevel);
     // 一致する名言があれば、その中からランダムに一つを選ぶ
     if (matchingQuotes.length > 0) {
       const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
