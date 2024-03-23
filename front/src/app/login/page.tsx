@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'; // 追加
 // import { useRouter } from 'next/router';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider , createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../../firebase'; // Firebaseの設定ファイルをインポート
+import { log } from '../_utils/logger';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -15,9 +16,10 @@ const LoginPage = () => {
   const handleLoginWithEmail = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      log('User logged in with email:', email); // ログ出力
       router.push('/admin'); // ログイン成功後に管理画面へリダイレクト
     } catch (error) {
-      console.error('ログインエラー:', error);
+      log('Login error:', error); // ログ出力
     }
   };
 
@@ -25,9 +27,10 @@ const LoginPage = () => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      log('User logged in with Google'); // ログ出力
       router.push('/admin'); // ログイン成功後に管理画面へリダイレクト
     } catch (error) {
-      console.error('Googleログインエラー:', error);
+      log('Google login error:', error); // ログ出力
     }
   };
 
@@ -37,10 +40,11 @@ const LoginPage = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // 新規登録成功時にメール認証を送信
       await sendEmailVerification(userCredential.user);
+      log('User signed up and email verification sent:', newEmail); // ログ出力
       // メール認証送信後、管理画面へリダイレクト
       router.push('/admin'); // 新規登録成功後に管理画面へリダイレクト
     } catch (error) {
-      console.error('新規登録エラー:', error);
+      log('Sign up error:', error); // ログ出力
     }
   };
 
