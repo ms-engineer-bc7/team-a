@@ -5,15 +5,31 @@ import { NextPage } from 'next';
 import { createQuote, getQuotes, deleteQuote } from '../_components/fetch';
 import { log } from '../_utils/logger';
 import { EMOTION_MAP } from '../_utils/constants';
+// 必要なFirebaseの認証機能をインポートします
+import { auth } from '../../../firebase'; // team-a\front\firebase.tsに格納
 
+//Quote オブジェクトの型を定義
+interface Quote {
+  id: number;
+  quote: string;
+  author: string;
+  comment?: string;  // commentはオプショナル（存在しない場合もある）とする場合
+  emotion_id: number;
+}
+
+const emotionMap: { [key: string]: number } = {
+  '🥹': 1,
+  '😢': 2,
+  '😭': 3,
+};
 
 const AdminEditQuote: NextPage = () => {
-  // const [quote, setQuote] = useState('');
-  // const [author, setAuthor] = useState('');
-  // const [comment, setComment] = useState('');
-  // const [emotionId, setEmotionId] = useState<number | null>(null);
-  const [quotes, setQuotes] = useState<any[]>([]); // 一時的にany[]型で設定
-  // const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
+  const [quote, setQuote] = useState('');
+  const [author, setAuthor] = useState('');
+  const [comment, setComment] = useState('');
+  const [emotionId, setEmotionId] = useState<number | null>(null);
+  const [quotes, setQuotes] = useState<Quote[]>([]); // quotes 状態変数の型を Quote[] に設定
+  const [selectedQuoteId, setSelectedQuoteId] = useState<number | null>(null);
   const router = useRouter();
 
   const fetchQuotes = async () => {
@@ -73,6 +89,18 @@ const AdminEditQuote: NextPage = () => {
     // ユーザーがキャンセルを選択した場合、ここには到達しない
   };
 
+  // ログアウト処理
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      alert('ログアウトしました');
+      router.push('/login'); // ログアウト後、ログインページにリダイレクト
+    } catch (error) {
+      console.error('ログアウトに失敗しました:', error);
+      alert('ログアウトに失敗しました');
+    }
+  };
+
   return (
     <div>
       <h1>管理画面</h1>
@@ -91,6 +119,8 @@ const AdminEditQuote: NextPage = () => {
       ))}
       {/* "管理画面へ戻る"ボタンを追加 */}
       <button onClick={() => router.push('/admin')}>管理画面へ戻る</button>
+      {/* "ログアウト"ボタンを追加 */}
+      <button onClick={handleLogout}>ログアウト</button>
     </div>
   );
 };
