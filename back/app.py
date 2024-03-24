@@ -226,23 +226,36 @@ def update_encourage(id):
 #             return jsonify({'error': 'テキストの入力をしてください'}), 400
 #     else:
 #         return jsonify({'error': '名言が見当たりません'}), 404
+# ログレベルの設定
+app.logger.setLevel(logging.INFO)
 
 # Positiveの削除(DELETE)
 @app.route('/positives/<int:id>', methods=['DELETE'])
 def delete_positive(id):
+ try:
     positive = Positive.query.get_or_404(id)
     db.session.delete(positive)
     db.session.commit()
+    app.logger.info(f'Positive with ID {id} has been deleted.')  # 削除後のログ記録
     return jsonify({'message': 'Positiveが削除されました'}), 200
+ except Exception as e:
+    app.logger.error(f'Error deleting Positive with ID {id}: {e}')  # エラーログ記録
+    return jsonify({'error': 'Positiveの削除中にエラーが発生しました'}), 500
 
 # Encourageの削除(DELETE)
 @app.route('/encourages/<int:id>', methods=['DELETE'])
 def delete_encourage(id):
+ try:
     encourage = Encourage.query.get_or_404(id)
     db.session.delete(encourage)
     db.session.commit()
+    app.logger.info(f'Encourage with ID {id} has been deleted.')  # 削除後のログ記録
     # 削除処理...
     return jsonify({'message': 'Encourageが削除されました'}), 200
+ except Exception as e:
+        app.logger.error(f'Error deleting Encourage with ID {id}: {e}')  # エラーログ記録
+        return jsonify({'error': 'Encourageの削除中にエラーが発生しました'}), 500
+
 
 # DELETEエンドポイント設定
 # @app.route('/quotes/<int:id>', methods=['DELETE'])
