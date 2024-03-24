@@ -24,13 +24,14 @@
 - バックエンド
   - 言語            : Python
   - フレームワーク   : Flask
-  - ORM             : pgAdmin
+  - ORM             : SQLAlchemy
+  - GUIツール       : pgAdmin
   - DB　　　　　　　 : PostgreSQL
   - Djangoを学習しながらで開発を進められる時間もなさそうだったため
   - Stack OverflowでPythonの中でも技術トレンドの順位でも上位の
   - フレームワークのFlaskを選択
-  - ORMはPostgreSQL用の触ったことがないpgAdminにチャレンジ
-  - サーバーとORMは新しいものに触れるため、DBは使用したことがある
+  - ORMはPostgreSQL用の触ったことがないSQLAlchemyやGUIはpgAdminにチャレンジ
+  - サーバーとORM、GUIツールは新しいものに触れるため、DBは使用したことがある
   - PostgreSQLを選定
 
 - 認証・認可
