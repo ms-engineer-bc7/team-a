@@ -1,9 +1,12 @@
 //管理画面用fetchでAPIリクエスト
-import { API_BASE_URL } from '../_utils/constants';
+// import { API_BASE_URL } from '../_utils/constants';
+//.envに環境変数設定
+const API_BASE_URL = process.env.NEXT_PUBLIC_APP_API_BASE_URL;
 
-// const apiUrl = 'http://localhost:5000/quotes'; //APIのURL
-// const apiUrl2 = 'http://localhost:5000/encourages'; // APIのURLを修正
-// const apiUrl3 = 'http://localhost:5000/positives'; // APIのURLを修正
+const apiUrl = `${API_BASE_URL}quotes`; // APIのURL
+const apiUrl2 = `${API_BASE_URL}encourages`; // APIのURLを修正
+const apiUrl3 = `${API_BASE_URL}positives`; // APIのURLを修正
+
 interface Quote {
   id?: number;
   quote: string;
@@ -13,7 +16,7 @@ interface Quote {
 }
 
 const getQuotes = async () => {
-    const response = await fetch(`${API_BASE_URL}/quotes`);
+    const response = await fetch(`${apiUrl}`);
     if (!response.ok) {
       throw new Error('Quotes fetching failed');
     }
@@ -21,7 +24,7 @@ const getQuotes = async () => {
   };
   
   const getQuoteById = async (id: number) => {
-    const response = await fetch(`${API_BASE_URL}/quotes/${id}`);
+    const response = await fetch(`${apiUrl}/${id}`);
     if (!response.ok) {
       throw new Error('Quote fetching failed');
     }
@@ -29,7 +32,7 @@ const getQuotes = async () => {
   };
 
 const createQuote = async (quote: Quote) => {
-  const response = await fetch(`${API_BASE_URL}/quotes`, {
+  const response = await fetch(`${apiUrl}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +48,7 @@ const createQuote = async (quote: Quote) => {
 };
 
 const updateQuote = async (id: number, quote: Quote) => {
-  const response = await fetch(`${API_BASE_URL}/quotes/${id}`, {
+  const response = await fetch(`${apiUrl}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -63,9 +66,9 @@ const updateQuote = async (id: number, quote: Quote) => {
 const deleteQuote = async (id: number, resourceType: string) => {
   let url;
   if (resourceType === 'encourage') {
-    url = `${API_BASE_URL}/encourages/${id}`;
+    url = `${apiUrl2}/${id}`;
   } else if (resourceType === 'positive') {
-    url = `${API_BASE_URL}/positives/${id}`;
+    url = `${apiUrl3}/${id}`;
   } else {
     throw new Error('Invalid resource type');
   }
