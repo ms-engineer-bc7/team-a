@@ -67,7 +67,7 @@
 | 1       | 人生とは、嵐が過ぎ去るのを待つことではない... | ヴィヴィアン・グリーン(歌手) | ８歳でピアノを始め... | 1          |
 
 ### ER図
-![ER Diagram](https://file.notion.so/f/f/dd34e334-236c-4ce4-b8ac-0b475834ddea/03d9c9ad-77eb-4bd4-9dac-cdd572462bd3/d_3WuUEEJ0.svg?id=37fd2a61-e8fe-4918-b168-c45c1a396840&table=block&spaceId=dd34e334-236c-4ce4-b8ac-0b475834ddea&expirationTimestamp=1711411200000&signature=hpxJCFWpOLeu1UJfH8Plif6iFBLIK5NgblPi0zqj10U&downloadName=d_3WuUEEJ0.svg)
+![名言アプリER図](quoteER.png)
 
 ---
 # API設計書
