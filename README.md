@@ -45,9 +45,31 @@
 - Notionに習得知識・手順をまとめて共有
 
 
-================================================================================
+---
+# 正規化とER図
 
+### Emotion_table
+| id (PK) | emotion |  value |
+| --- | --- | --- |
+| 1 | しょんぼり | -0.3 |
+| 2 | 悲しい | -0.6 |
+| 3 | 絶望 | -0.9 |
 
+### Positive Table
+| id (PK) | quote | author | comment | emotion_id |
+| ------- | ----- | ------ | ------- | ---------- |
+| 1       | 20歳の顔は自然の贈り物... | ココ・シャネル（デザイナー） | ファッションブランド「シャネル」の創始者... | 2          |
+| 2       | やさしい言葉は... | マザーテレサ（修道女） | カトリックの家庭に生まれ... | 3          |
+
+### Encourage Table
+| id (PK) | quote | author | comment | emotion_id |
+| ------- | ----- | ------ | ------- | ---------- |
+| 1       | 人生とは、嵐が過ぎ去るのを待つことではない... | ヴィヴィアン・グリーン(歌手) | ８歳でピアノを始め... | 1          |
+
+### ER図
+![ER Diagram](https://file.notion.so/f/f/dd34e334-236c-4ce4-b8ac-0b475834ddea/03d9c9ad-77eb-4bd4-9dac-cdd572462bd3/d_3WuUEEJ0.svg?id=37fd2a61-e8fe-4918-b168-c45c1a396840&table=block&spaceId=dd34e334-236c-4ce4-b8ac-0b475834ddea&expirationTimestamp=1711411200000&signature=hpxJCFWpOLeu1UJfH8Plif6iFBLIK5NgblPi0zqj10U&downloadName=d_3WuUEEJ0.svg)
+
+---
 # API設計書
 
 ## 概要
@@ -103,7 +125,7 @@
   }
   ```
 ---
-- ### GET:特定の名言取得
+### GET:特定の名言取得
 - **リクエスト**:
   - パスパラメータ: ``/quote/encourages　or　positives/{id}`
 - **レスポンス**:
@@ -118,7 +140,7 @@
   }
   ```
 ---
-- ### POST:名言作成
+### POST:名言作成
 - **リクエスト**:
   ```json
   {
@@ -142,7 +164,7 @@
   ```
 
 ---
-- ### 名言更新
+### 名言更新
 - **リクエスト**:
   - パスパラメータ: ``/quote/encourages　or　positives/{id}`
   ```json
@@ -168,7 +190,11 @@
   ```
 
 ---
-- ### 名言削除
+### 名言削除
 - **リクエスト**:
   - パスパラメータ: ``/quote/encourages　or　positives/{id}`
 - **レスポンス**:Got a DELETE request
+
+---
+
+
